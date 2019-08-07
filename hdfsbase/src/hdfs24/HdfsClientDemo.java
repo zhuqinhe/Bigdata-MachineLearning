@@ -36,7 +36,7 @@ public class HdfsClientDemo {
 		FileSystem fs = FileSystem.get(new URI("hdfs://node1:9000/"), conf, "root");
 		
 		// 上传一个文件到HDFS中
-		fs.copyFromLocalFile(new Path("D:/JDK/jdk-8u11-windows-x64-8.0.11.12.1406275777.exe"), new Path("/"));
+		fs.copyFromLocalFile(new Path("D:/JDK/jdk-8u11-windows-x64-8.0.11.12.1406275777.exe"), new Path("/jdk"));
 		
 		fs.close();
 	}
@@ -46,10 +46,10 @@ public class HdfsClientDemo {
 	@Before
 	public void init() throws Exception{
 		Configuration conf = new Configuration();
-		conf.set("dfs.replication", "2");
+		conf.set("dfs.replication", "4");
 		conf.set("dfs.blocksize", "64m");
 		
-		fs = FileSystem.get(new URI("hdfs://hdp-01:9000/"), conf, "root");
+		fs = FileSystem.get(new URI("hdfs://node1:9000/"), conf, "root");
 		
 	}
 	
@@ -62,7 +62,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testGet() throws IllegalArgumentException, IOException{
 		
-		fs.copyToLocalFile(new Path("/hdp20-05.txt"), new Path("f:/"));
+		fs.copyToLocalFile(new Path("/jdk"), new Path("f:/"));
 		fs.close();
 		
 	}
@@ -74,7 +74,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testRename() throws Exception{
 		
-		fs.rename(new Path("/install.log"), new Path("/aaa/in.log"));
+		fs.rename(new Path("/aaa"), new Path("/tmp/aaa"));
 		
 		fs.close();
 		
@@ -86,7 +86,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testMkdir() throws Exception{
 		
-		fs.mkdirs(new Path("/xx/yy/zz"));
+		fs.mkdirs(new Path("/tmp"));
 		
 		fs.close();
 	}
@@ -98,7 +98,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testRm() throws Exception{
 		
-		fs.delete(new Path("/aaa"), true);
+		fs.delete(new Path("/jdk-8u11-windows-x64-8.0.11.12.1406275777.exe"), true);
 		
 		fs.close();
 	}
