@@ -36,7 +36,7 @@ public class HdfsClientDemo {
 		FileSystem fs = FileSystem.get(new URI("hdfs://node1:9000/"), conf, "root");
 		
 		// 上传一个文件到HDFS中
-		fs.copyFromLocalFile(new Path("D:/JDK/jdk-8u11-windows-x64-8.0.11.12.1406275777.exe"), new Path("/jdk"));
+		fs.copyFromLocalFile(new Path("D:/word.txt"), new Path("/wordcount/input/word.txt"));
 		
 		fs.close();
 	}
@@ -86,7 +86,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testMkdir() throws Exception{
 		
-		fs.mkdirs(new Path("/tmp"));
+		fs.mkdirs(new Path("/wordcount/input"));
 		
 		fs.close();
 	}
