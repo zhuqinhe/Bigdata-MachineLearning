@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>mapreduce24</name>
+	<name>submit_task_yarn_local</name>
 	<comment></comment>
 	<projects>
 	</projects>

@@ -39,7 +39,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>cn.edu360.mr.wc.JobSubmitter</mainClass>
+							<mainClass>com.yarn.submit.JobSubmitter</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
