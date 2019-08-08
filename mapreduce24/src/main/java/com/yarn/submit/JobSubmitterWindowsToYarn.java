@@ -29,17 +29,17 @@ public class JobSubmitterWindowsToYarn {
 		
 		Configuration conf = new Configuration();
 		// 1、设置job运行时要访问的默认文件系统
-		conf.set("fs.defaultFS", "hdfs://hdp-01:9000");
+		conf.set("fs.defaultFS", "hdfs://node1:9000");
 		// 2、设置job提交到哪去运行
 		conf.set("mapreduce.framework.name", "yarn");
-		conf.set("yarn.resourcemanager.hostname", "hdp-01");
+		conf.set("yarn.resourcemanager.hostname", "node1");
 		// 3、如果要从windows系统上运行这个job提交客户端程序，则需要加这个跨平台提交的参数
 		conf.set("mapreduce.app-submission.cross-platform","true");
 		
 		Job job = Job.getInstance(conf);
 		
 		// 1、封装参数：jar包所在的位置
-		job.setJar("D:\\appdev\\hadoop-16\\mapreduce24\\target\\mapreduce24-0.0.1-SNAPSHOT.jar");
+		job.setJar("D:/mapreduce24-0.0.1-SNAPSHOT.jar");
 		//job.setJarByClass(JobSubmitter.class);
 		
 		// 2、封装参数： 本次job所要调用的Mapper实现类、Reducer实现类
@@ -56,7 +56,7 @@ public class JobSubmitterWindowsToYarn {
 		
 		
 		Path output = new Path("/wordcount/output");
-		FileSystem fs = FileSystem.get(new URI("hdfs://hdp-01:9000"),conf,"root");
+		FileSystem fs = FileSystem.get(new URI("hdfs://node1:9000"),conf,"root");
 		if(fs.exists(output)){
 			fs.delete(output, true);
 		}

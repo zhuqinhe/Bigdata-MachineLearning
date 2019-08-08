@@ -28,7 +28,7 @@ public class JobSubmitterLinuxToYarn {
 	public static void main(String[] args) throws Exception {
 		
 		Configuration conf = new Configuration();
-		conf.set("fs.defaultFS", "hdfs://hdp-01:9000");
+		conf.set("fs.defaultFS", "hdfs://node1:9000");
 		conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
 		// 没指定默认文件系统
 		// 没指定mapreduce-job提交到哪运行

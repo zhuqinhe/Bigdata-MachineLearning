@@ -30,8 +30,8 @@ public class JobSubmitterWindowsLocal {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		
-		FileInputFormat.setInputPaths(job, new Path("f:/mrdata/wordcount/input"));
-		FileOutputFormat.setOutputPath(job, new Path("f:/mrdata/wordcount/output"));
+		FileInputFormat.setInputPaths(job, new Path("d:/gitprogect/wordcount/input"));
+		FileOutputFormat.setOutputPath(job, new Path("d:/gitprogect/wordcount/output"));
 		
 		job.setNumReduceTasks(3);
 		

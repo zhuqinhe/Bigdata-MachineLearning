@@ -39,7 +39,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.yarn.submit.JobSubmitter</mainClass>
+							<mainClass>com.yarn.submit.JobSubmitterWindowsToYarn</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

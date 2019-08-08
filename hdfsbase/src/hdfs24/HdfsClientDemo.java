@@ -98,7 +98,7 @@ public class HdfsClientDemo {
 	@Test
 	public void testRm() throws Exception{
 		
-		fs.delete(new Path("/jdk-8u11-windows-x64-8.0.11.12.1406275777.exe"), true);
+		fs.delete(new Path("/wordcount/output"), true);
 		
 		fs.close();
 	}
