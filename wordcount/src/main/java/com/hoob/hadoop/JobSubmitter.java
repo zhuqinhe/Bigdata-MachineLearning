@@ -16,7 +16,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
  * 功能：
  *   1、封装本次job运行时所需要的必要参数
  *   2、跟yarn进行交互，将mapreduce程序成功的启动、运行
- * @author ThinkPad
  *
  */
 public class JobSubmitter {
