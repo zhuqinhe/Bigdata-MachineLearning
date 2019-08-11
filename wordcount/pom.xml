@@ -34,7 +34,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.hoob.hadoop.JobSubmitterWindowsToYarn</mainClass>
+							<mainClass>com.hoob.hadoop.JobSubmitter</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
