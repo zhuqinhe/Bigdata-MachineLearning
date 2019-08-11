@@ -1,4 +1,4 @@
-package hdfs24;
+package hdfs;
 
 import java.io.IOException;
 import java.net.URI;
