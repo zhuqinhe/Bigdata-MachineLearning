@@ -66,7 +66,7 @@ public class ReduceSideJoin {
 				throws IOException, InterruptedException {
 			ArrayList<JoinBean> orderList = new ArrayList<>();
 			JoinBean userBean = null;
-
+			 System.out.println(key+"=======================");	
 			try {
 				// 区分两类数据
 				for (JoinBean bean : beans) {
@@ -119,8 +119,8 @@ public class ReduceSideJoin {
 		job.setOutputKeyClass(JoinBean.class);
 		job.setOutputValueClass(NullWritable.class);
 
-		FileInputFormat.setInputPaths(job, new Path("D:/gitprogect/data/input/order_join"));
-		FileOutputFormat.setOutputPath(job, new Path("D:/gitprogect/data/output/order_join"));
+		FileInputFormat.setInputPaths(job, new Path("E:/git/hadoop/input/order_join"));
+		FileOutputFormat.setOutputPath(job, new Path("E:/output/order_join"));
 
 		job.waitForCompletion(true);
 	}

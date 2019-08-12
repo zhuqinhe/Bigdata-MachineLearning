@@ -15,6 +15,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 /**
+ * http://wenda.chinahadoop.cn/question/2579
  * 本例是使用最low的方式实现
  * 
  * 还可以利用Partitioner+CompareTo+GroupingComparator 组合拳来高效实现
@@ -54,16 +55,26 @@ public class ReduceSideJoinStep1 {
 	}
 
 	public static class ReduceSideJoinReducer1 extends Reducer<JoinBean, JoinBean, JoinBean, NullWritable> {
-		
+		JoinBean keybean=new JoinBean();
+		JoinBean bean = new JoinBean();
 		@Override
 		protected void reduce(JoinBean key, Iterable<JoinBean> beans, Context context)throws IOException, InterruptedException {	
-				// 区分两类数据
-			  for (JoinBean bean : beans) {
-				  System.out.println(key+"-->"+bean);
-					  key.setUserName(bean.getUserName());
-					  key.setUserAge(bean.getUserAge());
-					  key.setUserFriend(bean.getUserFriend());
-					  context.write(key, NullWritable.get());
+			keybean.setUserName(key.getUserName());
+			keybean.setUserAge(key.getUserAge());
+			keybean.setUserFriend(key.getUserFriend());
+			keybean.setTableName(key.getTableName());
+			keybean.setUserId(key.getUserId());
+			// 区分两类数据
+			  for (JoinBean t : beans) {
+				if(t.getTableName().equals(keybean.getTableName())){
+					continue;
+				}
+				bean.setUserName(keybean.getUserName());
+				bean.setUserAge(keybean.getUserAge());
+				bean.setUserFriend(keybean.getUserFriend());
+				bean.setOrderId(t.getOrderId());
+				bean.setUserId(t.getUserId());
+				context.write(bean,NullWritable.get());
 			  }
 				
 		}
@@ -82,6 +93,7 @@ public class ReduceSideJoinStep1 {
 
 		job.setMapperClass(ReduceSideJoinMapper1.class);
 		job.setReducerClass(ReduceSideJoinReducer1.class);
+		
 		job.setPartitionerClass(JoinPartitioner.class);
 		job.setGroupingComparatorClass(JoinBeacGroupingComparator.class);
 		
@@ -93,8 +105,8 @@ public class ReduceSideJoinStep1 {
 		job.setOutputKeyClass(JoinBean.class);
 		job.setOutputValueClass(NullWritable.class);
 
-		FileInputFormat.setInputPaths(job, new Path("D:/gitprogect/data/input/order_join"));
-		FileOutputFormat.setOutputPath(job, new Path("D:/gitprogect/data/output/order_join_new"));
+		FileInputFormat.setInputPaths(job, new Path("E:/git/hadoop/input/order_join"));
+		FileOutputFormat.setOutputPath(job, new Path("E:/output/order_join_new"));
 
 		job.waitForCompletion(true);
 	}

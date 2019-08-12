@@ -3,6 +3,7 @@ package com.hoob.hadoop;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
 import org.apache.hadoop.io.WritableComparable;
 
 public class JoinBean implements WritableComparable<JoinBean> {
@@ -73,7 +74,7 @@ public class JoinBean implements WritableComparable<JoinBean> {
 
 	@Override
 	public String toString() {
-		return this.orderId + "," + this.userId + "," + this.userAge + "," + this.userName + "," + this.userFriend+","+this.tableName;
+		return this.orderId + "," + this.userId + "," + this.userAge + "," + this.userName + "," + this.userFriend;
 	}
 
 	@Override
@@ -102,12 +103,14 @@ public class JoinBean implements WritableComparable<JoinBean> {
 	@Override
 	public int compareTo(JoinBean o) {
 		//tableName order  user
+       
+		//return  this.getUserId().compareTo(o.getUserId())==0?this.getTableName().compareTo(o.getTableName()):this.getUserId().compareTo(o.getUserId());
 		
-		return 
-				this.getTableName().compareTo(o.getTableName())==0?(
-						this.getOrderId().compareTo(o.getOrderId())
-						):1
-				;
+		
+						
+		return  this.getUserId().compareTo(o.getUserId())==0?Integer.compare(o.getUserAge(),this.userAge):this.getUserId().compareTo(o.getUserId());
+
+		
 	}
 
 }
