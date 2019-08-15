@@ -1,0 +1,4 @@
+1,zhangsan,father:xiaoming#mother:xiaohuang#brother:xiaoxu,28
+2,lisi,father:mayun#mother:huangyi#brother:guanyu,22
+3,wangwu,father:wangjianlin#mother:ruhua#sister:jingtian,29
+4,mayun,father:mayongzhen#mother:angelababy,26

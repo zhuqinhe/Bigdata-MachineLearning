@@ -1,0 +1,6 @@
+1,zhangsan,18:male:深圳
+2,lisi,28:female:北京
+3,wangwu,38:male:广州
+4,赵六,26:female:上海
+5,钱琪,35:male:杭州
+6,王八,48:female:南京

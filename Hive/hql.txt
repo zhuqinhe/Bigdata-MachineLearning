@@ -1,0 +1,170 @@
+create table t_a(name string,numb int)
+row format delimited
+fields terminated by ',';
+
+create table t_b(name string,nick string)
+row format delimited
+fields terminated by ',';
+
+-- 本地导入
+load data local inpath '/root/hivetest/a.txt' into table t_a;
+load data local inpath '/root/hivetest/b.txt' into table t_b;
+
+-- hdfs导入
+load data inpath  '/a.txt' into table t_a;
+load data inpath  '/b.txt' into table t_b;
+
+
+-- 各类join
+--1/ 内连接
+-- 笛卡尔积
+select a.*,b.*
+from t_a a inner join t_b b;
+
+
+-- 指定join条件
+select a.*,b.*
+from 
+t_a a join t_b b on a.name=b.name;
+
+-- 2/ 左外连接（左连接）
+select a.*,b.*
+from 
+t_a a left outer join t_b b on a.name=b.name;
+
+
+-- 3/ 右外连接（右连接）
+select a.*,b.*
+from 
+t_a a right outer join t_b b on a.name=b.name;
+
+-- 4/ 全外连接
+select a.*,b.*
+from
+t_a a full outer join t_b b on a.name=b.name;
+
+
+-- 5/ 左半连接
+select a.*
+from 
+t_a a left semi join t_b b on a.name=b.name;
+
+
+-- 建表映射上述数据
+create table t_access(ip string,url string,access_time string)
+partitioned by (dt string)
+row format delimited fields terminated by ',';
+
+
+-- 导入数据
+load data local inpath '/root/hivetest/url1.txt' into table t_access partition(dt='2017-08-04');
+load data local inpath '/root/hivetest/url2.txt' into table t_access partition(dt='2017-08-05');
+load data local inpath '/root/hivetest/url3.txt' into table t_access partition(dt='2017-08-06');
+
+-- 查看表的分区
+show partitions t_access;
+
+-- 求8月4号以后，每天http://www.edu360.cn/job的总访问次数，及访问者中ip地址中最大的
+select dt,'http://www.edu360.cn/job',count(1),max(ip)
+from t_access
+where url='http://www.edu360.cn/job'
+group by dt having dt>'2017-08-04';
+
+
+select dt,max(url),count(1),max(ip)
+from t_access
+where url='http://www.edu360.cn/job'
+group by dt having dt>'2017-08-04';
+
+
+select dt,url,count(1),max(ip)
+from t_access
+where url='http://www.edu360.cn/job'
+group by dt,url having dt>'2017-08-04';
+
+
+
+select dt,url,count(1),max(ip)
+from t_access
+where url='http://www.edu360.cn/job' and dt>'2017-08-04'
+group by dt,url;
+
+
+-- 求8月4号以后，每天每个页面的总访问次数，及访问者中ip地址中最大的
+
+select dt,url,count(1),max(ip)
+from t_access
+where dt>'2017-08-04'
+group by dt,url;
+
+-- 求8月4号以后，每天每个页面的总访问次数，及访问者中ip地址中最大的，且，只查询出总访问次数>2 的记录
+-- 方式1：
+select dt,url,count(1) as cnts,max(ip)
+from t_access
+where dt>'2017-08-04'
+group by dt,url having cnts>2;
+
+
+-- 方式2：用子查询
+select dt,url,cnts,max_ip
+from
+(select dt,url,count(1) as cnts,max(ip) as max_ip
+from t_access
+where dt>'2017-08-04'
+group by dt,url) tmp
+where cnts>2;
+
+
+
+-- 建表映射上述数据
+create table t_family(id int,name string,family_members map<string,string>,age int)
+row format delimited fields terminated by ','
+collection items terminated by '#'
+map keys terminated by ':';
+
+-- 导入数据
+load data local inpath '/root/hivetest/split.txt' into table t_family;
+
+-- 查出每个人的 爸爸、姐妹
+select id,name,family_members["father"] as father,family_members["sister"] as sister,age
+from t_family;
+
+-- 查出每个人有哪些亲属关系
+select id,name,map_keys(family_members) as relations,age
+from  t_family;
+
+-- 查出每个人的亲人名字
+select id,name,map_values(family_members) as relations,age
+from  t_family;
+
+-- 查出每个人的亲人数量
+select id,name,size(family_members) as relations,age
+from  t_family;
+
+-- 查出所有拥有兄弟的人及他的兄弟是谁
+-- 方案1：一句话写完
+select id,name,age,family_members['brother']
+from t_family  where array_contains(map_keys(family_members),'brother');
+
+
+-- 方案2：子查询
+select id,name,age,family_members['brother']
+from
+(select id,name,age,map_keys(family_members) as relations,family_members 
+from t_family) tmp 
+where array_contains(relations,'brother');
+
+
+-- 建表映射上述数据
+
+drop table if exists t_user;
+create table t_user(id int,name string,info struct<age:int,sex:string,addr:string>)
+row format delimited fields terminated by ','
+collection items terminated by ':';
+
+-- 导入数据
+load data local inpath '/root/hivetest/userdata.txt' into table t_user;
+
+-- 查询每个人的id name和地址
+select id,name,info.addr
+from t_user;
