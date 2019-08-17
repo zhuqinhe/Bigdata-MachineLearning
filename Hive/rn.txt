@@ -1,0 +1,6 @@
+1,18,a,male
+2,19,b,male
+3,22,c,female
+4,16,d,female
+5,30,e,male
+6,26,f,female

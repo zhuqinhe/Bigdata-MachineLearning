@@ -168,3 +168,41 @@ load data local inpath '/root/hivetest/userdata.txt' into table t_user;
 -- 查询每个人的id name和地址
 select id,name,info.addr
 from t_user;
+
+
+
+-- row_number() over() 函数
+-- 造数据：
+
+1,18,a,male
+2,19,b,male
+3,22,c,female
+4,16,d,female
+5,30,e,male
+6,26,f,female
+
+create table t_rn(id int,age int,name string,sex string)
+row format delimited fields terminated by ',';
+
+load data local inpath '/root/hivetest/rn.dat' into table t_rn;
+
+-- 分组标记序号
+
+select * 
+from 
+(select id,age,name,sex,
+row_number() over(partition by sex order by age desc) as rn 
+from t_rn) tmp
+where rn<3
+;
+
+
+
+
+-- 窗口分析函数  sum() over()  ：可以实现在窗口中进行逐行累加
+
+-- 需求：求出每个人截止到每个月的总额
+
+select uid,month,amount,
+sum(amount) over(partition by uid order by month rows between unbounded preceding and current row) as accumulate
+from t_access_amount;
