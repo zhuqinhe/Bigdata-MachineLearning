@@ -195,10 +195,10 @@ public class CleanData {
 		Job job = Job.getInstance(conf);
 
 		// 1、封装参数：jar包所在的位置
-		job.setJar("D:\\cleandata-0.0.1-SNAPSHOT.jar");
+		job.setJar("D:\\cleandata.jar");
 
 
-		Path output = new Path("/flume_log/19-08-18/20-00output");
+		Path output = new Path("/flume_log/19-08-19/21-40output");
 		FileSystem fs = FileSystem.get(new URI("hdfs://node1:9000"),conf,"root");
 		if(fs.exists(output)){
 			fs.delete(output, true);
@@ -211,12 +211,11 @@ public class CleanData {
 		job.setOutputValueClass(NullWritable.class);
 
 		job.setNumReduceTasks(0);
-
 		// 避免生成默认的part-m-00000等文件，因为，数据已经交给MultipleOutputs输出了
 		LazyOutputFormat.setOutputFormatClass(job, TextOutputFormat.class);
 
-		FileInputFormat.setInputPaths(job, new Path("/flume_log/19-08-18/20-00"));
-		FileOutputFormat.setOutputPath(job, new Path("/flume_log/19-08-18/20-00output"));
+		FileInputFormat.setInputPaths(job, new Path("/flume_log/19-08-19/21-40"));
+		FileOutputFormat.setOutputPath(job, output);
 
 		boolean res = job.waitForCompletion(true);
 		System.exit(res ? 0 : 1);
