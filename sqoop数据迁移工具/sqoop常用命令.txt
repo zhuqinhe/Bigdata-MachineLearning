@@ -1,0 +1,69 @@
+测试数据库连接
+bin/sqoop list-databases  --connect jdbc:mysql://node1:3306/app  --username root  --password root
+
+sqoop create-hive-table --connect jdbc:mysql://node1:3306/app --table uv_info --username root --password secret_password --hive-table origin_ennenergy_transport.uv_info
+
+sqoop import --connect jdbc:mysql://ip:3306/application  --username root --password secret_password  --table uv_info  --hive-import   --hive-table origin_ennenergy_transport.uv_info  -m 1 --fields-terminated-by "\001";
+
+
+bin/sqoopimport \
+--connect\
+jdbc:MySQL://node1.edu360.com:3306/test\
+--usernameroot \
+--password123456 \
+--tablemy_user \
+--hbase-create-table\
+--hbase-table test \
+--hbase-row-key id \
+--column-family info \
+-m1
+
+###### 注意：sqoop目前支持的hbase版本  Hbase <= 0.95.2  ，高版本hbase环境下会报错
+导入mysql数据到hbase
+bin/sqoop import \
+--connect jdbc:mysql://hdp-01:3306/userdb \
+--table emp \
+--username root \
+--password root \
+--hbase-create-table  \
+--hbase-table t_emp \
+--hbase-row-key id \
+--column-family info \
+--m 1
+
+
+1）列出mysql数据库中的所有数据库
+sqoop list-databases –connect jdbc:mysql://node1:3306/ –username root –password 123456
+
+
+2)连接mysql并列出test数据库中的表
+sqoop list-tables –-connect jdbc:mysql://node1:3306/test –-username root –-password 123456
+命令中的test为mysql数据库中的test数据库名称 username password分别为mysql数据库的用户密码
+
+
+3)将关系型数据的表结构复制到hive中,只是复制表的结构，表中的内容没有复制过去。
+sqoop create-hive-table –-connect jdbc:mysql://node1:3306/test
+–-table sqoop_test –-username root –-password 123456 –-hive-table test
+其中 –table sqoop_test为mysql中的数据库test中的表 –hive-table
+test 为hive中新建的表名称
+
+
+4)从关系数据库导入文件到hive中
+sqoop import –-connect jdbc:mysql://node1:3306/zxtest –-username
+root –-password 123456 –-table sqoop_test –-hive-import –-hive-table
+s_test -m 1
+
+
+5)将hive中的表数据导入到mysql中,在进行导入之前，mysql中的表hive_test必须已经提起创建好了。
+bin/sqoop export --connect jdbc:mysql://node1:3306/app --username root --password root --table dim_user_active_day --export-dir /user/hive/warehouse/app.db/dim_user_active_day/day=2017-09-21/dim=0000 --input-fields-terminated-by \\001
+
+6）从数据库导出表的数据到HDFS上文件
+./sqoop import –-connect jdbc:mysql://node1:3306/compression –-username=hadoop
+–-password=123456 –-table HADOOP_USER_INFO -m 1 –-target-dir /user/test
+
+
+7）从数据库增量导入表数据到hdfs中
+./sqoop import –connect jdbc:mysql://node1:3306/compression
+–username=hadoop –password=123456 –table HADOOP_USER_INFO -m 1
+–target-dir /user/test  –check-column id –incremental append
+–last-value 3

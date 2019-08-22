@@ -1,0 +1,94 @@
+/**  将mysql的表导入 hdfs **/
+bin/sqoop import \
+--connect jdbc:mysql://node1:3306/userdb \
+--username root \
+--password root \
+--target-dir \
+/sqooptest \
+--fields-terminated-by ',' \
+--table emp \
+--split-by id \
+--m 2
+
+
+
+/**  将mysql的表导入 hive **/
+bin/sqoop import \
+--connect jdbc:mysql://node1:3306/userdb \
+--username root \
+--password root \
+--hive-import \
+--fields-terminated-by ',' \
+--table emp \
+--split-by id \
+--m 2
+
+/**  将mysql的表的增量数据导入 hdfs **/
+bin/sqoop import \
+--connect jdbc:mysql://node1:3306/userdb \
+--target-dir /sqooptest  \
+--username root \
+--password root \
+--table emp \
+--m 1 \
+--incremental append \
+--check-column id \
+--last-value 1205
+
+/**  将hdfs的文件数据导出到mysql **/
+bin/sqoop export \
+--connect jdbc:mysql://node1:3306/userdb \
+--username root \
+--password root \
+--input-fields-terminated-by ',' \
+--table emp \
+--export-dir /sqooptest/
+
+
+/**  将hive的表数据（hdfs的文件）导出到mysql **/
+bin/sqoop export \
+--connect jdbc:mysql://node1:3306/userdb \
+--username root \
+--password root \
+--input-fields-terminated-by ',' \
+--table t_from_hive \
+--export-dir /user/hive/warehouse/t_a/
+
+
+--TODO  -----
+将app数据仓库中的 日新用户维度统计报表：dim_user_new_day  导出到mysql的表中去
+
+-- 1 在mysql中建库建表
+create database app;
+create table dim_user_new_day(
+os_name varchar(20),city varchar(20),release_channel varchar(20),app_ver_name varchar(20),cnts int,dt varchar(20)
+);
+
+--注意：将库和表的编码集改成utf8,命令如下：
+修改库的编码：
+mysql> alter database db_name character set utf8;
+修改表的编码：
+mysql> ALTER TABLE table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci; 
+
+
+-- 2 用sqoop将hive中的 dim_user_new_day 中的指定日分区的数据导出到mysql 的dim_user_new_day
+#!/bin/bash
+day=`date -d '-1 day' +'%Y-%m-%d'`
+
+/root/apps/sqoop/bin/sqoop export \
+--connect "jdbc:mysql://node1:3306/app?useUnicode=true&characterEncoding=utf-8" \
+--username root \
+--password root \
+--input-fields-terminated-by '\001' \
+--table dim_user_new_day \
+--export-dir /user/hive/warehouse/app.db/dim_user_new_day_1p/day=${day} /
+
+
+
+
+
+
+
+
+
+
