@@ -38,13 +38,11 @@
                     <appendAssemblyId>false</appendAssemblyId>  
                     <finalName>cleandata</finalName>  
                     <descriptorRefs>  
-<!-- 将依赖的jar包中的class文件打进生成的jar包-->  
                         <descriptorRef>jar-with-dependencies</descriptorRef>  
                     </descriptorRefs>  
                     <archive>  
                         <manifest>  
                             <addClasspath>true</addClasspath>  
-<!-- 有Main函数的类-->  
                             <mainClass>com.hadoop.CleanData</mainClass>  
                         </manifest>  
                     </archive>  
@@ -54,7 +52,6 @@
                         <id>make-assembly</id>  
                         <phase>package</phase>  
                         <goals>  
-<!-- <goal>single</goal>-->  
                             <goal>assembly</goal>  
                         </goals>  
                     </execution>  
