@@ -18,7 +18,7 @@ import scala.Tuple2;
  * @author hoob
  * @date 2020年4月3日上午11:37:07
  */
-public class SparkJoinRddDeme {
+public class SparkJoinRddDemo {
 	  public static void main(String[] args){ 
 	        SparkConf conf = new SparkConf().setAppName("JoinRddDeme").setMaster("local"); 
 	        JavaSparkContext sc = new JavaSparkContext(conf); 
@@ -28,28 +28,18 @@ public class SparkJoinRddDeme {
 	   
 	        //FirstRDD 构造第一个二维rdd 
 	        JavaPairRDD<Integer, Integer> firstRDD = rdd.mapToPair(number->new Tuple2<>(number,number));
-	   
 	        //SecondRDD  构造第二个二维rdd
 	        JavaPairRDD<Integer, String> secondRDD = rdd.mapToPair(number->new Tuple2<>(number,number+"p")); 
-	        
 	        //构建joinrdd
+	        //将一组数据转化为RDD后，分别创造出两个PairRDD，然后再对两个PairRDD进行归约（即合并相同Key对应的Value）
 	        JavaPairRDD<Integer, Tuple2<Integer, String>> joinRDD = firstRDD.join(secondRDD); 
-	   
-	        JavaRDD<String> res = joinRDD.map(new Function<Tuple2<Integer, Tuple2<Integer, String>>, String>() { 
-	            @Override 
-	            public String call(Tuple2<Integer, Tuple2<Integer, String>> integerTuple2Tuple2) throws Exception { 
-	                int key = integerTuple2Tuple2._1(); 
-	                int value1 = integerTuple2Tuple2._2()._1(); 
-	                String value2 = integerTuple2Tuple2._2()._2(); 
-	                return "<" + key + ",<" + value1 + "," + value2 + ">>"; 
-	            } 
-	        }); 
+	        //输出join后的字符串结果
+	        JavaRDD<String> res = joinRDD.map(cp->cp._1+":"+cp._2._1+","+cp._2._2); 
 	   
 	        List<String> resList = res.collect(); 
 	        for(String str : resList) 
 	            System.out.println(str); 
 	   
 	        sc.stop(); 
-	    } 
-	} 
+	    }  
 }
