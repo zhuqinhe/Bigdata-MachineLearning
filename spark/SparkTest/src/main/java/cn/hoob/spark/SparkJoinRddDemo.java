@@ -14,13 +14,11 @@ import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;
 
 /**
- * @Description 
- * @author hoob
- * @date 2020年4月3日上午11:37:07
+ 将一组数据转化为RDD后，分别创造出两个PairRDD，然后再对两个PairRDD进行归约（即合并相同Key对应的Value）
  */
 public class SparkJoinRddDemo {
 	  public static void main(String[] args){ 
-	        SparkConf conf = new SparkConf().setAppName("JoinRddDeme").setMaster("local"); 
+	        SparkConf conf = new SparkConf().setAppName("SparkJoinRddDemo").setMaster("local");
 	        JavaSparkContext sc = new JavaSparkContext(conf); 
 	   
 	        List<Integer> data = Arrays.asList(1,2,3,4,5); 

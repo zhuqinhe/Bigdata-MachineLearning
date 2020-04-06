@@ -14,9 +14,8 @@ import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;
 
 /**
- * @Description 
- * @author hoob
- * @date 2020年4月3日下午5:06:52
+ 有两个元组Tuple的集合A与B,先对A组集合中key相同的value进行聚合,
+ 然后对B组集合中key相同的value进行聚合,之后对A组与B组进行"join"操作
  */
 public class SparkCogroupRddDemo {
 	public static void main(String[] args) {  
@@ -41,24 +40,9 @@ public class SparkCogroupRddDemo {
 		JavaPairRDD<Integer, Integer> scores=sContext.parallelizePairs(scoresList);  
 	    //有两个元组Tuple的集合A与B,先对A组集合中key相同的value进行聚合,然后对B组集合中key相同的value进行聚合,之后对A组与B组进行"join"操作;
 		JavaPairRDD<Integer, Tuple2<Iterable<String>, Iterable<Integer>>> nameScores=names.cogroup(scores);           
+        //打印结果
+		nameScores.foreach(tp->System.out.println("key="+tp._1+",name="+tp._2._1+",value="+tp._2._2));
 
-		nameScores.foreach(tp->tp._2._1.forEach(
-				tmp->
-		            )
-				);
-				/*new VoidFunction<Tuple2<Integer, Tuple2<Iterable<String>, Iterable<Integer>>>>() {  
-			private static final long serialVersionUID = 1L;  
-			int i=1;  
-			@Override  
-			public void call(  
-					Tuple2<Integer, Tuple2<Iterable<String>, Iterable<Integer>>> t)  
-							throws Exception {  
-				String string="ID:"+t._1+" , "+"Name:"+t._2._1+" , "+"Score:"+t._2._2;  
-				string+="     count:"+i;  
-				System.out.println(string);  
-				i++;  
-			}  
-		});  */
 
 		sContext.close();  
 	}  
