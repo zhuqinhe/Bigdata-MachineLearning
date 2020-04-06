@@ -17,7 +17,7 @@ object IpLoaction1 {
 
     //在Driver端获取到全部的IP规则数据（全部的IP规则数据在某一台机器上，跟Driver在同一台机器上）
     //全部的IP规则在Driver端了（在Driver端的内存中了）
-    val rules: Array[(Long, Long, String)] = MyUtils.readRules(args(0))
+    val rules: Array[(Long, Long, String)] = MyUtils.readRules("hdfs://172.16.199.10:9000/ip.txt")
 
     //将Drive端的数据广播到Executor中
 
@@ -26,7 +26,7 @@ object IpLoaction1 {
     val broadcastRef: Broadcast[Array[(Long, Long, String)]] = sc.broadcast(rules)
 
     //创建RDD，读取访问日志
-    val accessLines: RDD[String] = sc.textFile(args(1))
+    val accessLines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/access.log")
 
     //这个函数是在哪一端定义的？（Driver）
     val func = (line: String) => {

@@ -12,17 +12,17 @@ object GroupFavTeacher2 {
 
   def main(args: Array[String]): Unit = {
 
-    val topN = args(1).toInt
+    val topN = 1
 
     val subjects = Array("bigdata", "javaee", "php")
 
     val conf = new SparkConf().setAppName("GroupFavTeacher2").setMaster("local[4]")
     val sc = new SparkContext(conf)
 
-    sc.setCheckpointDir("hdfs://node-4:9000/ck")
+    sc.setCheckpointDir("./ck")
 
     //指定以后从哪里读取数据
-    val lines: RDD[String] = sc.textFile(args(0))
+    val lines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/teacher.log")
 
 
 

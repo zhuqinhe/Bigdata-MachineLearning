@@ -12,13 +12,13 @@ object GroupFavTeacher1 {
 
   def main(args: Array[String]): Unit = {
 
-    val topN = args(1).toInt
+    val topN = 1
 
     val conf = new SparkConf().setAppName("FavTeacher").setMaster("local[4]")
     val sc = new SparkContext(conf)
 
     //指定以后从哪里读取数据
-    val lines: RDD[String] = sc.textFile(args(0))
+    val lines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/teacher.log")
     //整理数据
     val sbjectTeacherAndOne: RDD[((String, String), Int)] = lines.map(line => {
       val index = line.lastIndexOf("/")
@@ -33,14 +33,14 @@ object GroupFavTeacher1 {
 
     //聚合，将学科和老师联合当做key
     val reduced: RDD[((String, String), Int)] = sbjectTeacherAndOne.reduceByKey(_+_)
-
+    println(reduced.collect().toBuffer)
     //分组排序（按学科进行分组）
     //[学科，该学科对应的老师的数据]
 
     //val grouped: RDD[(String, Iterable[((String, String), Int)])] = reduced.groupBy((t: ((String, String), Int)) =>t._1._1, 4)
 
     val grouped: RDD[(String, Iterable[((String, String), Int)])] = reduced.groupBy(_._1._1)
-
+    println(grouped.collect().toBuffer)
     //经过分组后，一个分区内可能有多个学科的数据，一个学科就是一个迭代器
     //将每一个组拿出来进行操作
     //为什么可以调用sacla的sortby方法呢？因为一个学科的数据已经在一台机器上的一个scala集合里面了

@@ -18,7 +18,7 @@ object IpLoaction2 {
     val sc = new SparkContext(conf)
 
     //取到HDFS中的ip规则
-    val rulesLines:RDD[String] = sc.textFile(args(0))
+    val rulesLines:RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/ip.txt")
     //整理ip规则数据
     val ipRulesRDD: RDD[(Long, Long, String)] = rulesLines.map(line => {
       val fields = line.split("[|]")
@@ -37,7 +37,7 @@ object IpLoaction2 {
     val broadcastRef: Broadcast[Array[(Long, Long, String)]] = sc.broadcast(rulesInDriver)
 
     //创建RDD，读取访问日志
-    val accessLines: RDD[String] = sc.textFile(args(1))
+    val accessLines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/access.log")
 
     //整理数据
     val proviceAndOne: RDD[(String, Int)] = accessLines.map(log => {

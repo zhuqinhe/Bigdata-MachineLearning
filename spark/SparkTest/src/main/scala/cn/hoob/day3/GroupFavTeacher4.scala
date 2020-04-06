@@ -14,13 +14,13 @@ object GroupFavTeacher4 {
 
   def main(args: Array[String]): Unit = {
 
-    val topN = args(1).toInt
+    val topN = 2
 
     val conf = new SparkConf().setAppName("GroupFavTeacher2").setMaster("local[4]")
     val sc = new SparkContext(conf)
 
     //指定以后从哪里读取数据
-    val lines: RDD[String] = sc.textFile(args(0))
+    val lines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/teacher.log")
     //整理数据
     val sbjectTeacherAndOne: RDD[((String, String), Int)] = lines.map(line => {
       val index = line.lastIndexOf("/")

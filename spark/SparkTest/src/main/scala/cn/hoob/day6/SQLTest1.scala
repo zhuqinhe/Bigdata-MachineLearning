@@ -11,6 +11,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 object SQLTest1 {
 
   def main(args: Array[String]): Unit = {
+/*
 
     //spark2.x SQL的编程API(SparkSession)
     //是spark2.x SQL执行的入口
@@ -50,6 +51,7 @@ object SQLTest1 {
     df2.show()
 
     session.stop()
+*/
 
 
   }

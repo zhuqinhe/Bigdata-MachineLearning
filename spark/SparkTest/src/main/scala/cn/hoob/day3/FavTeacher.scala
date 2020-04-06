@@ -16,9 +16,9 @@ object FavTeacher {
     val sc = new SparkContext(conf)
 
     //指定以后从哪里读取数据
-    val lines: RDD[String] = sc.textFile(args(0))
+    val lines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/teacher.log")
     //整理数据
-    val teacherAndOne = lines.map(line => {
+      val teacherAndOne = lines.map(line => {
       val index = line.lastIndexOf("/")
       val teacher = line.substring(index + 1)
       //val httpHost = line.substring(0, index)

@@ -31,10 +31,10 @@ object CustomSort1 {
     })
 
     //不满足要求
-    //tpRDD.sortBy(tp => tp._3, false)
+    userRDD.sortBy(tp => tp._3, false)
 
     //将RDD里面装的User类型的数据进行排序
-    val sorted: RDD[User] = userRDD.sortBy(u => u)
+   // val sorted: RDD[User] = userRDD.sortBy(u => u)
 
     val r = sorted.collect()
 

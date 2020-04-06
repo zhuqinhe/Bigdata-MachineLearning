@@ -43,10 +43,10 @@ object JedisConnectionPool{
 //    conn.close()
 
     val r = conn.keys("*")
-    import scala.collection.JavaConversions._
+   /* import scala.collection.JavaConversions._
     for (p <- r) {
       println(p + " : " + conn.get(p))
-    }
+    }*/
   }
 
 }

@@ -26,4 +26,5 @@ public class SparkSortByDemo {
         JavaRDD<String> resultRDD = javaRDD1.sortBy(tp->tp.split("#")[0],false,3);
         System.out.println(resultRDD.collect());
     }
+
 }
