@@ -19,7 +19,7 @@ import java.util.List;
 public class FavTeacherDemo3 {
     public static void main(String[] args) {
 
-        SparkConf conf = new SparkConf().setAppName("FavTeacherDemo2").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("FavTeacherDemo3").setMaster("local");
         //创建sparkContext
         JavaSparkContext jsc = new JavaSparkContext(conf);
         //指定以后从哪里读取数据
