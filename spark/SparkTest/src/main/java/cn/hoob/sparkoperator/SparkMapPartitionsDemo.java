@@ -1,11 +1,8 @@
-package cn.hoob.spark;
+package cn.hoob.sparkoperator;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import scala.Tuple1;
-import scala.Tuple2;
 
 import java.util.*;
 /**

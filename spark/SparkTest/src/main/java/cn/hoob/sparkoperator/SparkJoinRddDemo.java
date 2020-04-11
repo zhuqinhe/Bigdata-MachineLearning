@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.hoob.spark;
+package cn.hoob.sparkoperator;
 
 import java.util.Arrays;
 import java.util.List;

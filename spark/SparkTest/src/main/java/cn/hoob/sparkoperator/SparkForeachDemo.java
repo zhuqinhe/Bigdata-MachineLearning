@@ -1,4 +1,4 @@
-package cn.hoob.spark;
+package cn.hoob.sparkoperator;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;

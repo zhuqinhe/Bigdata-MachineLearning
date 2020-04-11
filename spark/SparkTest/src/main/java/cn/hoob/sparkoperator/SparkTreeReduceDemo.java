@@ -1,10 +1,8 @@
-package cn.hoob.spark;
+package cn.hoob.sparkoperator;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
 
 import java.util.Arrays;
 import java.util.List;
