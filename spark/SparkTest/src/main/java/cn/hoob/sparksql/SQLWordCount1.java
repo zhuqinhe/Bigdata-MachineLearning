@@ -9,7 +9,7 @@ import org.apache.spark.sql.SparkSession;
 import java.util.Arrays;
 
 /**
- * Created by zx on 2017/10/13.
+ * Spark DSL 分析数据
  */
 public class SQLWordCount1 {
     public static void main(String[] args) throws Exception {
