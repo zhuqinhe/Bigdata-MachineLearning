@@ -3,7 +3,7 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.*;
 import java.util.Arrays;
 /**
- * Created by zx on 2017/10/13.
+ * Spark SQl  分析数据
  */
 public class SQLWordCount {
     public static void main(String[] args) throws Exception {
