@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * 分析最受欢迎得老师
  */
-public class SparkAccessProcessDataSet1 {
+public class SparkAccessProcessDataSet {
     public static void main(String[] args) {
 
 
-        SparkSession sparkSession= SparkSession.builder().appName("SparkAccessProcessDataSet1").master("local[*]").getOrCreate();
+        SparkSession sparkSession= SparkSession.builder().appName("SparkAccessProcessDataSet").master("local[*]").getOrCreate();
 
         //读取IP规则
         Dataset<String> ips  = sparkSession.read().textFile("hdfs://node1:9000/hoob/spark/data/ip.txt");
