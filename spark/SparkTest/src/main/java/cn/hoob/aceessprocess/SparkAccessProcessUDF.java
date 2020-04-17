@@ -54,7 +54,7 @@ public class SparkAccessProcessUDF {
             }
             return province;
         }, DataTypes.StringType);
-        
+
         //读取ip数据
         Dataset<String>stringLogsRDD=sparkSession.read().textFile("hdfs://node1:9000/hoob/spark/data/access.log");
         stringLogsRDD.createOrReplaceTempView("ips");
