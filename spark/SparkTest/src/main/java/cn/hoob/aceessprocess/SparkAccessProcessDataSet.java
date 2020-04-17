@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 分析最受欢迎得老师
+ * spark SQL 分析访问日子
  */
 public class SparkAccessProcessDataSet {
     public static void main(String[] args) {
