@@ -19,7 +19,7 @@
 <configuration>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://node-6:3306/hivedb?createDatabaseIfNotExist=true</value>
+    <value>jdbc:mysql://node1:3306/hivedb?createDatabaseIfNotExist=true</value>
     <description>JDBC connect string for a JDBC metastore</description>
   </property>
 
@@ -31,13 +31,13 @@
 
   <property>
     <name>javax.jdo.option.ConnectionUserName</name>
-    <value>xiaoniu</value>
+    <value>appuser</value>
     <description>username to use against metastore database</description>
   </property>
 
   <property>
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value>123568</value>
+    <value>Mysql123+</value>
     <description>password to use against metastore database</description>
   </property>
   
