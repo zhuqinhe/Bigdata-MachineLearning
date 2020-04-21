@@ -23,6 +23,7 @@ public class SparkReadExel {
         //dataset只有一列，默认这列叫value
         Dataset<Row> cvsdataset= sparkSession.read().
                 format("com.crealytics.spark.excel")
+                .option("header", "true")
                 .option("useHeader", "true") // 是否将第一行作为表头
                 .option("inferSchema", "false") // 是否推断schema
                 .option("workbookPassword", "None") // excel文件的打开密码
