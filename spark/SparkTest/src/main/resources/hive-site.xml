@@ -19,7 +19,7 @@
 <configuration>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://node1:3306/hivedb?createDatabaseIfNotExist=true</value>
+    <value>jdbc:mysql://node1:3306/hive?createDatabaseIfNotExist=true</value>
     <description>JDBC connect string for a JDBC metastore</description>
   </property>
 
@@ -40,5 +40,9 @@
     <value>Mysql123+</value>
     <description>password to use against metastore database</description>
   </property>
-  
+  <property>
+    <!--设置底层计算引擎-->
+    <name>hive.execution.engine</name>
+    <value>spark</value>
+  </property>
 </configuration>
