@@ -1,4 +1,4 @@
-kafka集群部署
+-kafka集群部署
 
 broker.id=1
 delete.topic.enable=true
