@@ -1,4 +1,4 @@
-package cn.hoob.aceessprocess;
+package cn.hoob.utils;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSocket;
@@ -34,7 +34,8 @@ import javax.net.ssl.X509TrustManager;
             int port;
             char[] passphrase;
 
-                String[] c = "maven.aliyun.com".split(":");
+                //String[] c = "maven.aliyun.com".split(":");
+            String[] c = "maven.aliyun.com".split(":");
                 host = c[0];
                 port = (c.length == 1) ? 443 : Integer.parseInt(c[1]);
                 String p = "changeit";
