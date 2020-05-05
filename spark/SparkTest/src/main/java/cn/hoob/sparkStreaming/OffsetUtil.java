@@ -16,7 +16,6 @@ import java.util.*;
 public class OffsetUtil {
 
  /*
-  手动维护offset的工具类
   首先在MySQL创建如下表
     CREATE TABLE `t_offset` (
       `topic` varchar(255) NOT NULL,
@@ -26,31 +25,36 @@ public class OffsetUtil {
       PRIMARY KEY (`topic`,`partition`,`groupid`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
    */
-
-    public static Map<TopicPartition, Long> getOffsetMapByMsql(String groupid, String topic) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8", "root", "root");
-        PreparedStatement pstmt = connection.prepareStatement("select * from t_offset where groupid=? and topic=?");
-        pstmt.setString(1, groupid);
-        pstmt.setString(2, topic);
-        ResultSet rs = pstmt.executeQuery();
-        Map<TopicPartition, Long> offsetMap = new HashMap<TopicPartition, Long>();
-        while (rs.next()) {
-            offsetMap.put(new TopicPartition(rs.getString("topic"), rs.getInt("partition")), rs.getLong("offset"));
+   //目前只支持当个topic
+    public static Map<TopicPartition, Long> getOffsetMapByMsql(String groupid, String topic){
+        Map<TopicPartition, Long> offsetMap = null;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "appuser", "Mysql123+");
+            PreparedStatement pstmt = connection.prepareStatement("select * from t_offset where groupid=? and topic=?");
+            pstmt.setString(1, groupid);
+            pstmt.setString(2, topic);
+            ResultSet rs = pstmt.executeQuery();
+            offsetMap = new HashMap<TopicPartition, Long>();
+            while (rs.next()) {
+                offsetMap.put(new TopicPartition(rs.getString("topic"), rs.getInt("partition")), rs.getLong("offset"));
+            }
+            rs.close();
+            pstmt.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        rs.close();
-        pstmt.close();
-        connection.close();
         return offsetMap;
 
     }
-
+    //目前只支持当个topic
     //将偏移量保存到数据库
-    public static void setOffsetRangesByMsql(String groupid, ArrayList<OffsetRange> offsetRange) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8", "root", "root");
+    public static void setOffsetRangesByMsql(String groupid, OffsetRange[] offsetRanges) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "appuser", "Mysql123+");
         //replace into表示之前有就替换,没有就插入
         PreparedStatement pstmt = connection.prepareStatement("replace into t_offset (`topic`, `partition`, `groupid`, `offset`) values(?,?,?,?)");
 
-        for (OffsetRange o : offsetRange) {
+        for (OffsetRange o : offsetRanges) {
             pstmt.setString(1, o.topic());
             pstmt.setInt(2, o.partition());
             pstmt.setString(3, groupid);
