@@ -35,7 +35,7 @@ import javax.net.ssl.X509TrustManager;
             char[] passphrase;
 
                 //String[] c = "maven.aliyun.com".split(":");
-            String[] c = "maven.aliyun.com".split(":");
+            String[] c = "maven.aliyun.com".split("&");
                 host = c[0];
                 port = (c.length == 1) ? 443 : Integer.parseInt(c[1]);
                 String p = "changeit";

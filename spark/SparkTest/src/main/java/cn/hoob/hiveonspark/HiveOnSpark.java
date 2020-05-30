@@ -16,8 +16,8 @@ public class HiveOnSpark {
 
         System.setProperty("HADOOP_USER_NAME", "root");
         SparkSession sparkSession= SparkSession.builder().appName("HiveOnSpark").master("local[*]").enableHiveSupport().getOrCreate();
-        //Dataset  hivedataSet= sparkSession.sql("select * from t_access");
-        //hivedataSet.show();
+        Dataset  hivedataSet= sparkSession.sql("select * from t_access");
+        hivedataSet.show();
         sparkSession.sql("drop table hoob_t_a");
         sparkSession.sql("create table hoob_t_a(name string,numb int) row format delimited fields terminated by ','");
         sparkSession.sql("load data   inpath '/a.txt' into table hoob_t_a ");

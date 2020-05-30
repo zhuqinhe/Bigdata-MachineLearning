@@ -1,6 +1,5 @@
 package cn.hoob.sparkStreaming;
 
-import kafka.common.TopicAndPartition;
 import lombok.val;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.hash.Hash;

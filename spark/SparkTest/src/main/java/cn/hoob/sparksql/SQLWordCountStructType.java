@@ -1,6 +1,5 @@
 package cn.hoob.sparksql;
 
-import org.apache.avro.ipc.specific.Person;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.*;

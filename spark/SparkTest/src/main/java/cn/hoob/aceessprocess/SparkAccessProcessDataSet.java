@@ -1,6 +1,5 @@
 package cn.hoob.aceessprocess;
 
-import org.apache.avro.ipc.specific.Person;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
