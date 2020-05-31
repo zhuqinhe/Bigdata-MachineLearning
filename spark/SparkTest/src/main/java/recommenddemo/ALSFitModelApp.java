@@ -28,7 +28,7 @@ public class ALSFitModelApp {
                 master("local[*]")
                 .config("spark.sql.shuffle.partitions", "2").enableHiveSupport().getOrCreate();
         //模型训练数据
-        Dataset<Row> traningDateSet = sparkSession.sql("select * from logs_all");
+        Dataset<Row> traningDateSet = sparkSession.sql("select userId ,seriesId ,count from logs_all");
         // 训练集，转为Rating格式
         JavaRDD<DataModel> ratingsRDD = traningDateSet.toJavaRDD().map(row -> {
             return new DataModel(row.getInt(0), row.getInt(1), row.getInt(2));
@@ -40,14 +40,15 @@ public class ALSFitModelApp {
         Dataset<Row> test = splits[1];
         // 构建模型,不断调试参数
         ALS als = new ALS()
-                .setMaxIter(10)
+                .setMaxIter(20)
                 .setRegParam(0.01)
                 .setImplicitPrefs(true)//  false  为显式评分模式，true 为隐式评分模式
                 .setUserCol("uid")
                 .setItemCol("series")
                 .setRatingCol("count");
         ALSModel model = als.fit(training);
-
+        // 注意下面使用冷启动策略drop，确保不会有NaN评估指标
+        model.setColdStartStrategy("drop");
         Dataset<Row> predictions = model.transform(test);
 
         RegressionEvaluator evaluator = new RegressionEvaluator()
