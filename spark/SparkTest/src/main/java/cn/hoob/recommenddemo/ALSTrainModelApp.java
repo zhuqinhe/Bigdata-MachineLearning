@@ -1,4 +1,4 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 import lombok.val;
 import org.apache.spark.api.java.JavaDoubleRDD;

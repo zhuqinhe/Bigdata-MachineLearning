@@ -1,4 +1,4 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;

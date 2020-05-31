@@ -1,8 +1,6 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 
-
-import org.apache.spark.sql.sources.In;
 
 import java.io.Serializable;
 

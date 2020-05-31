@@ -1,11 +1,10 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;
 import org.apache.spark.mllib.linalg.distributed.MatrixEntry;
 import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.*;
-import scala.Tuple3;
 
 import java.io.IOException;
 

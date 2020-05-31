@@ -1,4 +1,4 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -9,7 +9,6 @@ import scala.Tuple2;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 对日志数据清洗，剥离出我们需要的信息

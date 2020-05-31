@@ -1,4 +1,4 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -6,9 +6,7 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;
 
-import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Comparator;
 
 /***
  * 基于内容维度统计，用于热门推荐，及补充用户行为推荐，

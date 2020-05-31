@@ -1,4 +1,4 @@
-package recommenddemo;
+package cn.hoob.recommenddemo;
 
 
 
