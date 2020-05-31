@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 对日志数据清洗，剥离出我们需要的信息
+ * 基于用户+内容维度统计清洗
  */
 public class SparkLogProcessApp {
     public static void main(String[] args) throws SQLException {
@@ -49,7 +50,7 @@ public class SparkLogProcessApp {
             model.setTime(time);
             model.setUserid(userid);
             //加载查询db,把用户id，和contentId兑换成阿拉伯自增的id
-            model.setUid(Integer.parseInt(userid.replace("U00","")));
+            model.setUid(Integer.parseInt(userid.replace("U00", "")));
             model.setSeries(MySQLUtlis.getSeriesId(contentId));
             return new Tuple2<>(model, 1);
         });
@@ -68,7 +69,7 @@ public class SparkLogProcessApp {
         JavaRDD<DataModel> saveRdd = pairRDD.map(line -> line._1);
         //清理后格式化的日志，存hdfs(以备待用)
         //saveRdd.saveAsObjectFile("hdfs://node1:9000/recommend_processed_object/");
-        JavaRDD<String>resultrdd=saveRdd.map(line->line.getUid()+","+line.getSeries()+","+line.getCount()+","+line.getTime());
+        JavaRDD<String> resultrdd = saveRdd.map(line -> line.getUid() + "," + line.getSeries() + "," + line.getCount() + "," + line.getTime());
         resultrdd.saveAsTextFile("hdfs://node1:9000/recommend_processed_string/");
         jsc.stop();
     }

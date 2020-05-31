@@ -42,7 +42,7 @@ public class ALSFitModelApp {
         ALS als = new ALS()
                 .setMaxIter(10)
                 .setRegParam(0.01)
-                .setImplicitPrefs(false)//  false  为显式评分模式，true 为隐式评分模式
+                .setImplicitPrefs(true)//  false  为显式评分模式，true 为隐式评分模式
                 .setUserCol("uid")
                 .setItemCol("series")
                 .setRatingCol("count");
@@ -56,7 +56,7 @@ public class ALSFitModelApp {
                 .setPredictionCol("prediction");
         //取最优结果时，存下模型
         Double RMSE = evaluator.evaluate(predictions);
-        model.save("hdfs://node1:9000/recommend_processed_bestModel/"+RMSE);
+        model.save("hdfs://node1:9000/recommend_processed_bestModel/" + RMSE);
 
         System.out.println("Root-mean-square error = " + RMSE);
     }

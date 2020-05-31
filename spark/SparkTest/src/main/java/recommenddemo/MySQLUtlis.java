@@ -41,12 +41,12 @@ public class MySQLUtlis {
         // String _maxStatements = CommonUtil.properties.getProperty("maxStatements");
         //String _maxIdleTime = CommonUtil.properties.getProperty("maxIdleTime");
 
-        url =  "jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-        user ="appuser";
-        password = "Mysql123+" ;
+        url = "jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        user = "appuser";
+        password = "Mysql123+";
 
         isUseConnectionPools = true;
-        minPoolSize =20;
+        minPoolSize = 20;
         maxPoolSize = 1000;
         checkoutTimeout = 5000;
         maxStatements = 1000;
@@ -55,7 +55,7 @@ public class MySQLUtlis {
 //				18000:Integer.parseInt(_maxIdleTime);
         if (isUseConnectionPools) {
             ds = new ComboPooledDataSource();
-            try{
+            try {
                 ds.setDriverClass("com.mysql.jdbc.Driver");
             } catch (PropertyVetoException e) {
                 e.printStackTrace();
@@ -85,12 +85,13 @@ public class MySQLUtlis {
         }
 
     }
-    private static Connection getConnection() throws SQLException{
-        if(isUseConnectionPools){
+
+    private static Connection getConnection() throws SQLException {
+        if (isUseConnectionPools) {
             return ds.getConnection();
         }
 
-        return DriverManager.getConnection(url,user,password);
+        return DriverManager.getConnection(url, user, password);
     }
 
     public static Integer getSeriesId(String contentId) throws SQLException {
@@ -101,7 +102,7 @@ public class MySQLUtlis {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
-            connection =getConnection();
+            connection = getConnection();
 
             pstmt = connection.prepareStatement("select id  from series_id_contentid where contentId=?");
 
@@ -125,13 +126,14 @@ public class MySQLUtlis {
         }
         return id;
     }
-    public static String getSeriesContentId(int  sid) throws SQLException {
 
-        String  contentId = null;
+    public static String getSeriesContentId(int sid) throws SQLException {
+
+        String contentId = null;
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
-            connection =getConnection();
+            connection = getConnection();
 
             pstmt = connection.prepareStatement("select contentId from series_id_contentid where id=?");
 
@@ -160,8 +162,8 @@ public class MySQLUtlis {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
-          //  connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "appuser", "Mysql123+");
-            connection =getConnection();
+            //  connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bigdata?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "appuser", "Mysql123+");
+            connection = getConnection();
 
             pstmt = connection.prepareStatement("select id  from get_userid where userid=?");
 
@@ -212,18 +214,19 @@ public class MySQLUtlis {
 
         }
     }
-    public static  void processRecommendData(Rating[] datas) throws SQLException {
+
+    public static void processRecommendData(Rating[] datas) throws SQLException {
         //replace into表示之前有就替换,没有就插入
-        Connection connection=getConnection();
+        Connection connection = getConnection();
         PreparedStatement pstmt = connection.prepareStatement("INSERT INTO recommender (uid,sid,userid,contentId)VALUES(?,?,?,?)ON DUPLICATE KEY UPDATE userid = VALUES(userid),contentId = VALUES(contentId)");
-        if(datas==null||datas.length==0){
-            return ;
+        if (datas == null || datas.length == 0) {
+            return;
         }
-        for(Rating r:datas){
-            int uid=r.user();
-            int sid=r.product();
-            String userid="U00"+uid;
-            String contentId=MySQLUtlis.getSeriesContentId(sid);
+        for (Rating r : datas) {
+            int uid = r.user();
+            int sid = r.product();
+            String userid = "U00" + uid;
+            String contentId = MySQLUtlis.getSeriesContentId(sid);
             pstmt.setInt(1, uid);
             pstmt.setInt(2, sid);
             pstmt.setString(3, userid);
@@ -233,10 +236,8 @@ public class MySQLUtlis {
         }
 
 
-
-
-
     }
+
     //测试本地redis服务是否正常
     public static void main(String[] args) throws Exception {
         System.out.println(MySQLUtlis.getSeriesId("00000001000000100001000000000010"));

@@ -41,7 +41,6 @@ public class SparkLogToHiveAndCreateTableApp {
         sparkSession.sql("load data inpath 'hdfs://node1:9000/recommend_processed_/trainingData' overwrite into table logs_training");
 
 
-
         Dataset testDataset = sparkSession.sql("select userId,seriesId,count from logs_all order by time desc limit " + testcount);
         testDataset.write().mode(SaveMode.Overwrite).parquet("hdfs://node1:9000/recommend_processed_/testData");
         sparkSession.sql("drop table if exists logs_test");
