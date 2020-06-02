@@ -9,9 +9,11 @@ import org.apache.spark.sql.*;
 import java.io.IOException;
 
 /***
- 基于物品的协同过滤,这里的是余弦相似度
+ *  和用户相关
+ * 基于物品的协同过滤又称Item-Based CF
+   基于物品的协同过滤,这里的是余弦相似度
  **/
-public class SimilarityModelApp {
+public class SimilarityRecommendApp {
     public static void main(String[] args) throws IOException {
         System.setProperty("HADOOP_USER_NAME", "root");
         SparkSession sparkSession = SparkSession.builder().appName("SimilarityModelApp").
