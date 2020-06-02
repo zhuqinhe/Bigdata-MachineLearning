@@ -1,5 +1,6 @@
-package cn.hoob.recommenddemo;
+package cn.hoob.recommenddemo.als;
 
+import cn.hoob.recommenddemo.utils.MySQLUtlis;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;

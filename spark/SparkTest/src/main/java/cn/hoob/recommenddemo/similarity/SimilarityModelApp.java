@@ -1,4 +1,4 @@
-package cn.hoob.recommenddemo;
+package cn.hoob.recommenddemo.similarity;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;

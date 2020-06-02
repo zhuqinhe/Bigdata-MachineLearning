@@ -1,4 +1,4 @@
-package cn.hoob.recommenddemo;
+package cn.hoob.recommenddemo.similarity;
 
 
 
