@@ -1,7 +1,6 @@
 package cn.hoob.recommenddemo.similarity;
 
 import com.alibaba.fastjson.JSON;
-import com.mysql.cj.xdevapi.JsonParser;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.MapFunction;
@@ -11,13 +10,12 @@ import org.apache.spark.ml.linalg.SparseVector;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.sql.*;
-import org.spark_project.jetty.util.StringUtil;
+import scala.Tuple2;
 import scala.reflect.ClassTag$;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /*****
  * 计算每个合集的相对相似度
@@ -30,7 +28,7 @@ public class SimilaritySeriesRecommendApp {
     public static final String COMPETITOR_DATA_SQL = "select id,contentId,coalesce(kind,'') as kind from series_data " +
             " where kind is not null ";
 
-    public static <Dateset> void main(String[] args) throws IOException {
+    public static  void main(String[] args) throws IOException {
         System.setProperty("HADOOP_USER_NAME", "root");
         SparkSession sparkSession = SparkSession.builder().appName("SimilarityModelApp").
                 master("local[*]")
@@ -60,41 +58,83 @@ public class SimilaritySeriesRecommendApp {
         Dataset<Row> seriesData = sparkSession.sql(DATA_SQL);
         Dataset<Row> seriesTfidDataset = TfidfUtil.tfidf(seriesData);
         //求解合集之间的相似度
-        Dataset<SimilartyData> similartyDataList = pickupTheTopSimilarShop(seriesTfidDataset, trainningData);
-        similartyDataList.show();
+        Dataset<SimilartyDatas> similartyDataList = pickupTheTopSimilarShop(seriesTfidDataset, trainningData);
+        //这个我不知道为啥会报row.getSimilartyDatas（）方法无效
+        //Dataset<List<SimilartyData>>similartyDatas=similartyDataList.map(row->{return row.getSimilartyDatas()},Encoders.bean(List.class));
+        JavaRDD<SimilartyData>similartyDataListRdd=similartyDataList.toJavaRDD().map(row->row.getSimilartyDatas()).flatMap(row->row.iterator());
+
+       // Dataset<Row> similartys=sparkSession.createDataFrame(similartyDataListRdd,SimilartyData.class);
+        Dataset<SimilartyData> similartys=sparkSession.createDataset(similartyDataListRdd.rdd(),Encoders.bean(SimilartyData.class));
+        similartys.createOrReplaceTempView("similartys");
+        Dataset similartysFiter=  sparkSession.sql("" +
+             //   "select a.id,a.contentId,a.eleId,a.eleContentId,a.similarty " +
+              //  "from similartys a " +
+              //  "left join  similartys b on a.id=b.id and a.similarty>b.similarty " +
+              //  "where a.id!=a.eleId and b.id!=b.eleId  group by a.id,a.contentId   having count(a.id)<100 "
+        "select * from (select id,contentId,eleId,eleContentId,similarty, row_number() over(partition by id order by similarty desc) as rn from similartys where id!=eleId  ) tmp where rn<100");
+
+        //similartysFiter.show();
+        //把数据写入mysql
+        similartysFiter.write().format("jdbc")
+                .mode(SaveMode.Overwrite)
+                .option("url", "jdbc:mysql://localhost:3306/bigdata")
+                .option("dbtable", "series_similarty")
+                .option("user", "appuser")
+                .option("password", "Mysql123+")
+                .save();
+
+
 
     }
-    private static Dataset<SimilartyData> pickupTheTopSimilarShop(Dataset<Row> meituanTfidDataset, Broadcast<MiniTrainningData[]> trainningData){
-        return meituanTfidDataset.map(new MapFunction<Row, SimilartyData>() {
+    private static Dataset<SimilartyDatas> pickupTheTopSimilarShop(Dataset<Row> TfidDataset, Broadcast<MiniTrainningData[]> trainningData){
+        return TfidDataset.map(new MapFunction<Row, SimilartyDatas>() {
             @Override
-            public SimilartyData call(Row row) throws Exception {
-                SimilartyData similartyData = new SimilartyData();
+            public SimilartyDatas call(Row row) throws Exception {
+                SimilartyDatas similartyDatass=new SimilartyDatas();
+                List<SimilartyData> similartyDatas = new ArrayList<SimilartyData>();
                 Long id = row.getAs("id");
+                String  contentId=row.getAs("contentId");
                 Vector features = row.getAs("features");
-                similartyData.setId(id);
+
                 MiniTrainningData[] trainDataArray = trainningData.value();
                 if(ArrayUtils.isEmpty(trainDataArray)){
-                    return similartyData;
+                    return similartyDatass;
                 }
-                double maxSimilarty = 0;
-                long maxSimilareleShopId = 0;
+              //  double maxSimilarty = 0;
+               // long maxSimilareleShopId = 0;
                 for (MiniTrainningData trainData : trainDataArray) {
+                    SimilartyData similartyData=new SimilartyData();
                     Vector trainningFeatures = trainData.getFeatures();
                     long eleShopId = trainData.getId();
                     double dot = BLAS.dot(features.toSparse(), trainningFeatures.toSparse());
                     double v1 = Vectors.norm(features.toSparse(), 2.0);
                     double v2 = Vectors.norm(trainningFeatures.toSparse(), 2.0);
                     double similarty = dot / (v1 * v2);
-                    if(similarty>maxSimilarty){
-                        maxSimilarty = similarty;
-                        maxSimilareleShopId = eleShopId;
+                    //这里这样时计算最相似的一个，不需要先保留每一个的计算只后面才过滤
+                    //if(similarty>maxSimilarty){
+                     //   maxSimilarty = similarty;
+                     //   maxSimilareleShopId = eleShopId;
+                    //}
+                    similartyData.setId(id);
+                    similartyData.setContentId(contentId);
+                    similartyData.setEleContentId(trainData.getContentId());
+                    similartyData.setEleId(eleShopId);
+                    similartyData.setSimilarty(similarty);
+                    if(similartyDatas.size()<200){
+                        similartyDatas.add(similartyData);
+                    }else{
+                        if(similartyDatas.get(199).getSimilarty()<similarty){
+                            similartyDatas.remove(199);
+                            similartyDatas.add(similartyData);
+                        }
                     }
+
                 }
-                similartyData.setEleId(maxSimilareleShopId);
-                similartyData.setSimilarty(maxSimilarty);
-                return similartyData;
+                similartyDatass.setId(id);
+                similartyDatass.setSimilartyDatas(similartyDatas);
+                return similartyDatass;
             }
-        }, Encoders.bean(SimilartyData.class));
+        }, Encoders.bean(SimilartyDatas.class));
     }
     private static int[] integerListToArray(List<Integer> integerList){
         int[] intArray = new int[integerList.size()];

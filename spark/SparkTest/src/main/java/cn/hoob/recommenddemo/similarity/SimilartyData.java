@@ -2,11 +2,12 @@ package cn.hoob.recommenddemo.similarity;
 
 import java.io.Serializable;
 
-public class SimilartyData implements Serializable {
+public class SimilartyData implements  Comparable,Serializable {
     private Long id;
     private Long eleId;
     private String contentId;
-    private  Double similarty;
+    private String  eleContentId;
+    private Double similarty;
 
     public Long getId() {
         return id;
@@ -40,6 +41,14 @@ public class SimilartyData implements Serializable {
         this.similarty = similarty;
     }
 
+    public String getEleContentId() {
+        return eleContentId;
+    }
+
+    public void setEleContentId(String eleContentId) {
+        this.eleContentId = eleContentId;
+    }
+
     @Override
     public String toString() {
         return "SimilartyData{" +
@@ -49,4 +58,21 @@ public class SimilartyData implements Serializable {
                 ", similarty=" + similarty +
                 '}';
     }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof SimilartyData) {
+            SimilartyData goods = (SimilartyData) o;
+            if (this.similarty > goods.getSimilarty()) {
+                return 1;
+            } else if (this.similarty < goods.getSimilarty()) {
+                return -1;
+            } else {
+                return 0;
+
+            }
+        }
+        return 0;
+    }
+
 }
