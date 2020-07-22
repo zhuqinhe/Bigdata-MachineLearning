@@ -31,6 +31,10 @@ import java.util.List;
  *
  * 6、Kernel density estimation（核密度估计）
  * 这里的是核密度估计
+ * Spark ML 提供了一个工具类 KernelDensity 用于核密度估算，
+ * 核密度估算的意思是根据已知的样本估计未知的密度，属於非参数检验方法之一。
+ * 核密度估计的原理是。观察某一事物的已知分布，如果某一个数在观察中出现了，可认为这个数的概率密度很大，
+ * 和这个数比较近的数的概率密度也会比较大，而那些离这个数远的数的概率密度会比较小
  **/
 public class KernelDensityEstimation {
     public static void main(String[] args) throws IOException {

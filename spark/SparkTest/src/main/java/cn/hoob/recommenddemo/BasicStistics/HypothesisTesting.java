@@ -40,7 +40,7 @@ import java.util.Arrays;
 public class HypothesisTesting {
     public static void main(String[] args) throws IOException {
         System.setProperty("HADOOP_USER_NAME", "root");
-        SparkSession sparkSession = SparkSession.builder().appName("CorrelationsStatistics").
+        SparkSession sparkSession = SparkSession.builder().appName("HypothesisTesting").
                 master("local[*]")
                 .config("spark.sql.shuffle.partitions", "2").enableHiveSupport().getOrCreate();
         //sparksession to javaSparkContext
