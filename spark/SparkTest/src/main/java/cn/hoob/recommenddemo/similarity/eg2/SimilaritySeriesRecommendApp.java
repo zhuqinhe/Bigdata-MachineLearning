@@ -1,4 +1,4 @@
-package cn.hoob.recommenddemo.similarity;
+package cn.hoob.recommenddemo.similarity.eg2;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ArrayUtils;
@@ -10,7 +10,6 @@ import org.apache.spark.ml.linalg.SparseVector;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.sql.*;
-import scala.Tuple2;
 import scala.reflect.ClassTag$;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.util.List;
 
 /*****
  * 计算每个合集的相对相似度
- *
+ * 基于IF-IDF 分词构成的向量，计算两两合集的相似度
  * ********/
 public class SimilaritySeriesRecommendApp {
     public static final String TRAINNING_DATA_SQL = "select id,contentId,vectorSize, coalesce(vectorIndices,'[]') as vectorIndices, coalesce(vectorValues,'[]') as vectorValues" +

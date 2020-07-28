@@ -1,4 +1,4 @@
-package cn.hoob.recommenddemo.similarity;
+package cn.hoob.recommenddemo.similarity.eg1;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.mllib.linalg.distributed.CoordinateMatrix;
@@ -9,9 +9,8 @@ import org.apache.spark.sql.*;
 import java.io.IOException;
 
 /***
- *  和用户相关
- * 基于物品的协同过滤又称Item-Based CF
-   基于物品的协同过滤,这里的是余弦相似度
+ * 和用户相关
+ * 这里的是余弦相似度,基于用户评分计算两两相似度,实际两个内容是否真真的相似，实验结果可能实际差距比较大
  **/
 public class SimilarityRecommendApp {
     public static void main(String[] args) throws IOException {

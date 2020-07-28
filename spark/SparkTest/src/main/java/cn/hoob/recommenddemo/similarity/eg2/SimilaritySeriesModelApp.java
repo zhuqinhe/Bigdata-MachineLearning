@@ -1,8 +1,6 @@
-package cn.hoob.recommenddemo.similarity;
+package cn.hoob.recommenddemo.similarity.eg2;
 
-import lombok.val;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.linalg.SparseVector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -15,6 +13,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 /*****
+ * 数据预处理
  * 抽取db里面的数据，构造内容相似向量，存于hivi，以备待用
  * ********/
 public class SimilaritySeriesModelApp {

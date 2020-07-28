@@ -1,4 +1,6 @@
-package cn.hoob.recommenddemo.similarity;
+package cn.hoob.recommenddemo.similarity.eg2;
+
+import cn.hoob.recommenddemo.similarity.eg2.SimilartyData;
 
 import java.io.Serializable;
 import java.util.List;
