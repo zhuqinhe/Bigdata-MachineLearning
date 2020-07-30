@@ -33,6 +33,7 @@ object IpLoactionSQL {
     }).toDF("snum", "enum", "province")
 
 
+
     //创建RDD，读取访问日志
     val accessLines: Dataset[String] = spark.read.textFile(args(1))
 

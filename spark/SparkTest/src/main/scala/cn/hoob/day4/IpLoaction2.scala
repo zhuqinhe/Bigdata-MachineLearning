@@ -1,4 +1,4 @@
-package cn.edu360.day4
+package cn.hoob.day4
 
 import java.sql.{Connection, DriverManager, PreparedStatement}
 
@@ -18,7 +18,7 @@ object IpLoaction2 {
     val sc = new SparkContext(conf)
 
     //取到HDFS中的ip规则
-    val rulesLines:RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/ip.txt")
+    val rulesLines:RDD[String] = sc.textFile("hdfs://node1:9000/hoob/spark/data/ip.txt")
     //整理ip规则数据
     val ipRulesRDD: RDD[(Long, Long, String)] = rulesLines.map(line => {
       val fields = line.split("[|]")
@@ -37,7 +37,7 @@ object IpLoaction2 {
     val broadcastRef: Broadcast[Array[(Long, Long, String)]] = sc.broadcast(rulesInDriver)
 
     //创建RDD，读取访问日志
-    val accessLines: RDD[String] = sc.textFile("hdfs://172.16.199.10:9000/access.log")
+    val accessLines: RDD[String] = sc.textFile("hdfs://node1:9000/hoob/spark/data/access.log")
 
     //整理数据
     val proviceAndOne: RDD[(String, Int)] = accessLines.map(log => {

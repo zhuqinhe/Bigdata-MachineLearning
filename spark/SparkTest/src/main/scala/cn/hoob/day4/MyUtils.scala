@@ -1,4 +1,4 @@
-package cn.edu360.day4
+package cn.hoob.day4
 
 import java.sql.{Connection, DriverManager, PreparedStatement}
 
