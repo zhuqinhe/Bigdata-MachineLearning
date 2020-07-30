@@ -1,7 +1,6 @@
-package cn.hoob.feature_extraction;
+package cn.hoob.machine_learning.feature_extraction;
 
 import org.apache.spark.ml.feature.*;
-import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -31,7 +30,8 @@ public class Word2VecDomeApp {
                 RowFactory.create(Arrays.asList("Logistic regression models are neat".split(" ")))
         );
         StructType schema = new StructType(new StructField[]{
-                new StructField("text", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
+                new StructField("text", new ArrayType(DataTypes.StringType, true),
+                        false, Metadata.empty())
         });
         Dataset<Row> documentDF = sparkSession.createDataFrame(data, schema);
 

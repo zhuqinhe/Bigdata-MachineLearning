@@ -1,4 +1,4 @@
-package cn.hoob.feature_extraction;
+package cn.hoob.machine_learning.feature_extraction;
 
 import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.IDF;
