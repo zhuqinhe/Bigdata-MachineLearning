@@ -162,6 +162,17 @@
 			<artifactId>word</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.pentaho</groupId>
+			<artifactId>pentaho-aggdesigner-algorithm</artifactId>
+			<version>5.1.5-jhyde</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>
