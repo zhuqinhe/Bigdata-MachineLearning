@@ -1,20 +1,13 @@
 package cn.hoob.machine_learning.clustering.KMeans;
 
-import cn.hoob.machine_learning.regressor.IsotonicRegression.Model;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.mllib.clustering.KMeans;
-import org.apache.spark.mllib.clustering.KMeansModel;
-import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.ml.clustering.KMeans;
+import org.apache.spark.ml.clustering.KMeansModel;
+import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  K均值（K-means）算法
@@ -36,36 +29,25 @@ import java.util.ArrayList;
  seed:类型：长整型。含义：随机种子。
  tol:类型：双精度型。含义：迭代算法的收敛性。
  **/
-public class KMeansModelApp {
+public class KMeansLibsvmModelApp {
     public static void main(String[] args) throws IOException {
         System.setProperty("HADOOP_USER_NAME", "root");
         SparkSession sparkSession = SparkSession.builder().appName("KMeansModelApp").
                 master("local[*]")
                 .config("spark.sql.shuffle.partitions", "2").enableHiveSupport().getOrCreate();
 
-        JavaSparkContext jsc = new JavaSparkContext(sparkSession.sparkContext());
-        JavaRDD<String> stringRdd = jsc.textFile("D:\\ProgramFiles\\GitData\\hadoop\\spark\\SparkTest\\src\\main\\data\\mllib\\input\\mllibFromSpark\\kmeans_data.txt");
-
-        JavaRDD<Vector> dRdd=stringRdd.map(line-> {
-            String[] arr = line.split(" ");
-            ArrayList<Double> list = new ArrayList<Double>();
-            double[] d = new double[3];
-            int i = 0;
-            for (String num : arr) {
-                d[i] = new Double(num);
-                i++;
-            }
-            return Vectors.dense(d);
-        });
-        int numClusters = 2;
-        int numIterations = 20;
-        KMeansModel model = KMeans.train(dRdd.rdd(), numClusters, numIterations);
+         //Load training data
+         Dataset<Row> dataset = sparkSession.read().format("libsvm").
+                load("D:\\ProgramFiles\\GitData\\hadoop\\spark\\SparkTest\\src\\main\\data\\mllib\\input\\mllibFromSpark\\kmeans_libsvm_data.txt");
+       // Trains a k-means model.
+        KMeans kmeans = new KMeans().setK(2).setSeed(20L);
+        KMeansModel model = kmeans.fit(dataset);
 
         // Evaluate clustering by computing Within Set Sum of Squared Errors.
-        double WSSSE = model.computeCost(dRdd.rdd());
+        double WSSSE = model.computeCost(dataset);
         System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
 
-       // Shows the result.
+        // Shows the result.
         Vector[] centers = model.clusterCenters();
         System.out.println("Cluster Centers: ");
         for (Vector center: centers) {
