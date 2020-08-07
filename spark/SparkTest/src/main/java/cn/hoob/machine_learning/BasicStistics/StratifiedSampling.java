@@ -1,14 +1,8 @@
-package cn.hoob.recommenddemo.BasicStistics;
+package cn.hoob.machine_learning.BasicStistics;
 
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaDoubleRDD;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.linalg.Matrix;
-import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.mllib.stat.Statistics;
 import org.apache.spark.sql.SparkSession;
 import org.spark_project.guava.collect.ImmutableMap;
 import scala.Tuple2;

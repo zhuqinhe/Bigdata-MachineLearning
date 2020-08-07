@@ -1,21 +1,18 @@
-package cn.hoob.recommenddemo.BasicStistics;
+package cn.hoob.machine_learning.BasicStistics;
 
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaDoubleRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.linalg.Matrices;
-import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.mllib.random.RandomRDDs;
-import org.apache.spark.mllib.regression.LabeledPoint;
+import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 import org.apache.spark.mllib.stat.Statistics;
-import org.apache.spark.mllib.stat.test.ChiSqTestResult;
 import org.apache.spark.sql.SparkSession;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
 /***
  *  Basic Statistics
  *  分为：
@@ -30,21 +27,29 @@ import java.util.Arrays;
  * 5、Random data generation(随机数生成)
  *
  * 6、Kernel density estimation（核密度估计）
- *
- *    这里的是随机数生成
- *
+ * 这里的是汇总统计
  **/
-public class RandomData {
+public class SummaryStatistics {
     public static void main(String[] args) throws IOException {
         System.setProperty("HADOOP_USER_NAME", "root");
-        SparkSession sparkSession = SparkSession.builder().appName("RandomData").
+        SparkSession sparkSession = SparkSession.builder().appName("SummaryStatistics").
                 master("local[*]")
                 .config("spark.sql.shuffle.partitions", "2").enableHiveSupport().getOrCreate();
         //sparksession to javaSparkContext
         SparkContext sc=sparkSession.sparkContext();
         JavaSparkContext jsc = new JavaSparkContext(sc);
-        JavaDoubleRDD u = RandomRDDs.normalJavaRDD(jsc, 1000000L, 10);
-        JavaDoubleRDD v = u.mapToDouble(x -> 1.0 + 2.0 * x);
-        System.out.println(v.collect());
+
+        List<Vector>vectors=new ArrayList<>();
+        //稠密向量
+        vectors.add(Vectors.dense(4.0, 5.0, 0.0, 3.0));
+        vectors.add(Vectors.dense(6.0, 7.0, 0.0, 8.0));
+        //稀疏向量
+        vectors.add(Vectors.sparse(4, new int[] {0, 1}, new double[] {1.0,-2.0}));
+        vectors.add(Vectors.sparse(4, new int[] {0, 3}, new double[] {9.0, 1.0}));
+        JavaRDD<Vector> mat=jsc.parallelize(vectors);
+        MultivariateStatisticalSummary summary = Statistics.colStats(mat.rdd());
+        System.out.println(summary.mean());
+        System.out.println(summary.variance());
+        System.out.println(summary.numNonzeros());
     }
 }

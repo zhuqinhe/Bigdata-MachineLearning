@@ -1,4 +1,4 @@
-package cn.hoob.recommenddemo.BasicStistics;
+package cn.hoob.machine_learning.BasicStistics;
 
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaDoubleRDD;
@@ -7,14 +7,11 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Matrix;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
-import org.apache.spark.mllib.stat.MultivariateStatisticalSummary;
 import org.apache.spark.mllib.stat.Statistics;
 import org.apache.spark.sql.SparkSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /***
  *  Basic Statistics
