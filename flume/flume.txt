@@ -1,4 +1,3 @@
-/root/apps/flume/flume-1.6.0/bin/flume-ng agent --conf /root/apps/flume/flume-1.6.0/conf/ --conf-file /root/apps/flume/flume-1.6.0/dir-hdfs.conf --name ag1 -Dflume.root.logger=debug,console
+/root/apps/apache-flume-1.6.0-bin/bin/flume-ng agent --conf  /root/apps/apache-flume-1.6.0-bin/conf/ --conf-file /root/apps/apache-flume-1.6.0-bin/conf/dir-hdfs.conf --name ag1 -Dflume.root.logger=debug,console
 
 
-bin/flume-ng agent -c conf/ -f dir-hdfs.conf -n ag1 -Dflume.root.logger=INFO,console
