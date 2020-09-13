@@ -1,21 +1,14 @@
 package cn.hoob.jdbcrdd;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.rdd.JdbcRDD;
-import org.apache.spark.rdd.RDD;
-import org.codehaus.janino.Java;
-import scala.Tuple2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+
 /***
  * rdd连接mysql
  * **/

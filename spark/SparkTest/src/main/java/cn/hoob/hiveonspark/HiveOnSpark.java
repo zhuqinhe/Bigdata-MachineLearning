@@ -1,11 +1,6 @@
 package cn.hoob.hiveonspark;
 
-import cn.hoob.aceessprocess.IpRules;
-import cn.hoob.aceessprocess.IpUtils;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoder;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 
 /**

@@ -1,10 +1,7 @@
 package cn.hoob.machine_learning.als;
 
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.ml.clustering.GaussianMixture;
-import org.apache.spark.ml.clustering.GaussianMixtureModel;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.recommendation.ALS;
 import org.apache.spark.ml.recommendation.ALSModel;

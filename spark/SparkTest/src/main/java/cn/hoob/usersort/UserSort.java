@@ -1,8 +1,6 @@
 package cn.hoob.usersort;
 
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;

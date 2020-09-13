@@ -1,19 +1,10 @@
 package cn.hoob.aceessprocess;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
-import scala.Tuple2;
-import scala.Tuple3;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * spark SQL 分析访问日子

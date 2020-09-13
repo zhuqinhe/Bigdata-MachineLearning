@@ -1,11 +1,6 @@
 package cn.hoob.sparkStreaming;
 
-import lombok.val;
-import org.apache.hadoop.util.StringUtils;
-import org.apache.hadoop.util.hash.Hash;
 import org.apache.kafka.common.TopicPartition;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.streaming.kafka010.HasOffsetRanges;
 import org.apache.spark.streaming.kafka010.OffsetRange;
 import redis.clients.jedis.Jedis;
 
