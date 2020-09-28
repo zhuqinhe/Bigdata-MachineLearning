@@ -58,6 +58,7 @@ public class ALSModelApp {
         JavaRDD<Rating> ratingsRDD = sparkSession
                 .read().textFile("D:\\ProgramFiles\\GitData\\hadoop\\spark\\SparkTest\\src\\main\\data\\mllib\\input\\mllibFromSpark\\als\\sample_movielens_ratings.txt").javaRDD()
                 .map(new Function<String, Rating>() {
+                    @Override
                     public Rating call(String str) {
                         return Rating.parseRating(str);
                     }

@@ -1,10 +1,13 @@
-package cn.hoob.sparkStreaming;
+package cn.hoob.sparkStreaming.kafka;
 
 
+import cn.hoob.sparkStreaming.utils.OffsetUtil;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.function.*;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
@@ -16,7 +19,7 @@ import java.util.*;
 /**
  * StreamingContext  wordcount
  */
-public class KafkaDirectWordCountOffsetByRedis {
+public class KafkaDirectWordCountOffsetByMysql {
     public static void main(String[] args) throws Exception {
         //创建SparkConf对象
         SparkConf conf=new SparkConf()
@@ -50,7 +53,7 @@ public class KafkaDirectWordCountOffsetByRedis {
         // JavaInputDStream<ConsumerRecord<Object, Object>> lines = KafkaUtils.createDirectStream(jsc, LocationStrategies.PreferConsistent(),
         //        ConsumerStrategies.Subscribe(topics, kafkaParams,offsets));
         //检查redis里面是否存有对应的便宜量没有就从头开始读有就接着偏移量继续读
-        Map<TopicPartition, Long>offsets=OffsetUtil.getOffsetMapByReis(topics);
+        Map<TopicPartition, Long>offsets= OffsetUtil.getOffsetMapByMsql("hoobtest2",topics.toArray()[0].toString());
         //创建DStream
         JavaInputDStream<ConsumerRecord<Object, Object>> stream =null;
         if(offsets==null||offsets.isEmpty()){
@@ -93,7 +96,7 @@ public class KafkaDirectWordCountOffsetByRedis {
                     });
                     // some time later, after outputs have completed
                     //((CanCommitOffsets) finalStream.inputDStream()).commitAsync(offsetRanges);
-                    OffsetUtil.setOffsetMapByRedis(offsetRanges);
+                    OffsetUtil.setOffsetRangesByMsql("hoobtest2",offsetRanges);
 
                 }
         );

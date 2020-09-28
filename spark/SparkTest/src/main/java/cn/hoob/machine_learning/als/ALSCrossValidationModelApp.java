@@ -2,17 +2,20 @@ package cn.hoob.machine_learning.als;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.ml.Model;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.recommendation.ALS;
+import org.apache.spark.ml.recommendation.ALSModel;
 import org.apache.spark.ml.tuning.CrossValidator;
 import org.apache.spark.ml.tuning.CrossValidatorModel;
 import org.apache.spark.ml.tuning.ParamGridBuilder;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import scala.Option;
 
 import java.io.IOException;
 
@@ -49,7 +52,7 @@ public class ALSCrossValidationModelApp {
 
       // Build the recommendation model using ALS on the training data
       ALS als=new ALS()
-              .setMaxIter(8)
+              .setMaxIter(12)
               .setRank(20).setRegParam(0.8)
               .setUserCol("userId")
               .setItemCol("movieId")
@@ -70,8 +73,9 @@ public class ALSCrossValidationModelApp {
               setStages(new PipelineStage[] {als});
       // We use a ParamGridBuilder to construct a grid of parameters to search over.
       ParamMap[] paramGrid=new ParamGridBuilder()
-      .addGrid(als.rank(),new int[]{5,10,20})
-      .addGrid(als.regParam(),new double[]{0.05,0.10,0.15,0.20,0.40,0.80})
+      .addGrid(als.rank(),new int[]{5,8,10,12,15,20})
+      .addGrid(als.regParam(),new double[]{0.05,0.10,0.15,0.20,0.40,0.75,0.80})
+      .addGrid(als.maxIter(),new int[]{3,5,8,10,12})
       .build();
 
       // CrossValidator 需要一个Estimator,一组Estimator ParamMaps, 和一个Evaluator.
@@ -89,11 +93,14 @@ public class ALSCrossValidationModelApp {
       .setNumFolds(5);
 
       // 运行交叉检验，自动选择最佳的参数组合
-      CrossValidatorModel cvModel=cv.fit(training);
-      //保存模型
-      cvModel.save("/home/hadoop/spark/cvModel_als.modle");
 
-      //System.out.println("numFolds: "+cvModel.getNumFolds());
+      CrossValidatorModel cvModel=cv.fit(training);
+
+      //保存模型
+      //cvModel.save("/home/hadoop/spark/cvModel_als.modle");
+
+
+      System.out.println("numFolds: "+cvModel.getNumFolds());
       //Test数据集上结果评估  
       Dataset<Row> predictions=cvModel.transform(test);
       RegressionEvaluator evaluator = new RegressionEvaluator()
@@ -103,5 +110,25 @@ public class ALSCrossValidationModelApp {
       Double rmse = evaluator.evaluate(predictions);
       System.out.println("RMSE @ test dataset " + rmse);
       //Output: RMSE @ test dataset 0.943644792277118
-  }   
+
+
+      System.out.println(cvModel.bestModel().explainParams());
+
+
+      Pipeline bestPipeline = (Pipeline) cvModel.bestModel().parent();
+      PipelineStage[] stages = bestPipeline.getStages();
+      //输出最佳参数存储于db,模型设置成最优参数
+      int rank= (int) stages[0].extractParamMap().get(stages[0].getParam("rank")).get();
+      double regParam= (double) stages[0].extractParamMap().get(stages[0].getParam("regParam")).get();
+      Integer maxIter= (Integer) stages[0].extractParamMap().get(stages[0].getParam("maxIter")).get();
+      System.out.println("rank:"+rank+",regParam:"+regParam+",maxIter:"+maxIter);
+      /*for(PipelineStage stage:stages){
+          System.out.println(stage.extractParamMap().get(stage.getParam("regParam")));
+          System.out.println(stage.extractParamMap().get(stage.getParam("rank")));
+          Option<Object> regParam = stage.extractParamMap().get(stage.getParam("regParam"));
+          System.out.println(regParam.get());
+          Option<Object> rank = stage.extractParamMap().get(stage.getParam("rank"));
+          System.out.println(rank.get());
+      }*/
+  }
 }

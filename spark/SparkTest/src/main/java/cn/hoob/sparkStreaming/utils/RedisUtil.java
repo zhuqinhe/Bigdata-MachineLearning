@@ -1,4 +1,4 @@
-package cn.hoob.sparkStreaming;
+package cn.hoob.sparkStreaming.utils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

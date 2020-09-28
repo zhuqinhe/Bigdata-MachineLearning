@@ -80,7 +80,7 @@ public class ALSTrainModelApp {
                 JavaPairRDD<Tuple2<Integer, Integer>, Double> predictRDD = predict.mapToPair(line -> {
                     return new Tuple2<Tuple2<Integer, Integer>, Double>(new Tuple2(line.user(), line.product()), line.rating());
                 });
-                // 根据(userid, movieid)为key，将提供的rating与预测的rating进行比较
+                //根据(userid, movieid)为key，将提供的rating与预测的rating进行比较
                 JavaPairRDD<Tuple2<Integer, Integer>, Tuple2<Double, Double>> predictAndFact = predictRDD.join(testJavaRdd2);
 
                 // 计算RMSE(均方根误差)

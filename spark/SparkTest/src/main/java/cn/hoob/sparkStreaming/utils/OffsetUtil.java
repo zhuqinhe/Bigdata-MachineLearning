@@ -1,4 +1,4 @@
-package cn.hoob.sparkStreaming;
+package cn.hoob.sparkStreaming.utils;
 
 import org.apache.kafka.common.TopicPartition;
 import org.apache.spark.streaming.kafka010.OffsetRange;
