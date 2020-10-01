@@ -26,10 +26,6 @@ import org.apache.flume.sink.AbstractSink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Raul	
- * 2018年9月13日
- */
 
 import com.google.common.base.Preconditions;
 
@@ -55,13 +51,11 @@ public class LocalFileSystemSink extends AbstractSink implements Configurable {
   public void configure(Context context) {
     batchSize = context.getInteger("batchSize", DFLT_BATCH_SIZE);
     this.path = context.getString("path");
-    logger.debug(this.getName() + " " +
-        "batch size set to " + String.valueOf(batchSize));
+    logger.debug(this.getName() + " " + "batch size set to " + String.valueOf(batchSize));
     Preconditions.checkArgument(batchSize > 0, "Batch size must be > 0");
 
     logEveryNEvents = context.getInteger("logEveryNEvents", DFLT_LOG_EVERY_N_EVENTS);
-    logger.debug(this.getName() + " " +
-        "log event N events set to " + logEveryNEvents);
+    logger.debug(this.getName() + " " + "log event N events set to " + logEveryNEvents);
     Preconditions.checkArgument(logEveryNEvents > 0, "logEveryNEvents must be > 0");
   }
 
@@ -138,7 +132,9 @@ public class LocalFileSystemSink extends AbstractSink implements Configurable {
   
   
   	private void closePrintWriter(Map<String,PrintWriter> outMap){
-  		if(null==outMap) return;
+  		if(null==outMap) {
+            return;
+        }
   		for(String key : outMap.keySet()){
   			outMap.get(key).close();
   		}
