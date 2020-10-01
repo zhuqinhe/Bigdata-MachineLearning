@@ -1,0 +1,57 @@
+<assembly>
+	<id>bin</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>./etc</outputDirectory>
+			<includes>
+				<include>conf/*/*/*.properties</include>
+				<include>conf/*/*/*.xml.*</include>
+				<include>conf/*/*/*.conf</include>
+				<include>*/*.properties</include>
+			</includes>
+		</fileSet>
+		<!-- package svn version sh -->
+		<fileSet>
+			<directory>${project.build.outputDirectory}</directory>
+			<outputDirectory>./bin</outputDirectory>
+			<includes>
+				<include>version.sh</include>
+			</includes>
+		</fileSet>
+		<!-- 这里不能使用*全部拷贝过去，否则会导致上面拷贝的version.sh被覆盖 -->
+		<fileSet>
+			<directory>src/main/resources/bin</directory>
+			<outputDirectory>./bin</outputDirectory>
+			<includes>
+				<include>flume-ng</include>
+				<include>s*.sh</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources/install</directory>
+			<outputDirectory>./install</outputDirectory>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>jre</directory>
+			<outputDirectory>./jre</outputDirectory>
+			<includes>
+				<include>*.tar.gz</include>
+			</includes>
+		</fileSet>
+		<!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory>./</outputDirectory>
+			<includes>
+				<include>flume-plugin.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>
