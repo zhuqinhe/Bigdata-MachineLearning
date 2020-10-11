@@ -23,8 +23,9 @@ public class SparkReadCVS {
                 .option("inferSchema", "false") //是否自动推段内容的类型
                 .option("codec", "none") // 压缩类型
                 .load("D:\\ProgramFiles\\BigData\\data\\cvs\\电子发票登记---Hoob(2020-04).cvs.csv");//excel文件路径 + 文件名
-
-
+        cvsdataset.printSchema();
+      //或则
+        cvsdataset= sparkSession.read().csv("D:\\ProgramFiles\\BigData\\data\\cvs");//必须是给个目录，不能是文件
 
 
 
